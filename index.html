@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Nebula Weather - Modern weather forecast dashboard with real-time data">
+    <meta name="author" content="Nebula Weather">
+    <title>Nebula Weather · Modern Forecast Dashboard</title>
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <!-- Main Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-shell">
+        <!-- HOME PAGE -->
+        <div id="homePage" class="screen">
+            <div class="page-content">
+                <div class="city-header">
+                    <span class="city-name-main" id="homeCityName">Loading...</span>
+                    <span class="date-badge" id="homeDate"></span>
+                </div>
+                <div class="weather-hero">
+                    <img id="homeWeatherIcon" class="weather-icon-main" src="https://openweathermap.org/img/wn/01d@4x.png" alt="weather">
+                    <div class="temp-big"><span id="homeTemp">--</span>°</div>
+                    <div class="weather-desc" id="homeDesc">Clear Sky</div>
+                </div>
+                <div class="stats-grid">
+                    <div class="stat-card"><i class="fa-solid fa-droplet"></i><div class="stat-info"><h4>HUMIDITY</h4><p id="homeHumidity">--%</p></div></div>
+                    <div class="stat-card"><i class="fa-regular fa-temperature-low"></i><div class="stat-info"><h4>FEELS LIKE</h4><p id="homeFeels">--°</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-temperature-high"></i><div class="stat-info"><h4>MAX / MIN</h4><p id="homeMinMax">-- / --</p></div></div>
+                    <div class="stat-card"><i class="fa-solid fa-wind"></i><div class="stat-info"><h4>WIND</h4><p id="homeWind">-- m/s</p></div></div>
+                </div>
+                <div class="section-title"><i class="fa-regular fa-calendar"></i> 5-Day Forecast</div>
+                <div id="futureForecastContainer" class="forecast-horizontal"></div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item active" data-page="home"><i class="fa-solid fa-house"></i></div>
+                <div class="nav-item" data-page="search"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div class="nav-item" data-page="world"><i class="fa-solid fa-earth-americas"></i></div>
+            </div>
+        </div>
+
+        <!-- SEARCH PAGE -->
+        <div id="searchPage" class="screen" style="display: none;">
+            <div class="page-content">
+                <h3>📍 Find any city</h3>
+                <div class="search-row">
+                    <div class="search-wrapper">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <input type="text" id="searchInput" placeholder="e.g., London, Tokyo, New York" autocomplete="off">
+                    </div>
+                    <button class="search-button" id="searchBtn"><i class="fa-solid fa-magnifying-glass"></i> Search</button>
+                </div>
+                <div id="searchNormalMsg" class="info-message"><i class="fa-regular fa-compass"></i> Enter a city name and press Enter or click Search</div>
+                <div id="searchErrorMsg" class="error-msg-search" style="display: none;"><i class="fa-solid fa-circle-exclamation"></i> Location not found! Please check the city name and try again.</div>
+                <div id="searchResultBox" style="display: none;">
+                    <div class="result-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="city-name-main" id="searchCityName">--</span>
+                            <span id="searchTemp" style="font-size: 2rem; font-weight: 800;">--°</span>
+                        </div>
+                        <img id="searchWeatherImg" src="https://openweathermap.org/img/wn/01d@4x.png" style="width: 70px; margin: 10px 0;">
+                        <div class="search-weather-grid">
+                            <div class="stat-card"><i class="fa-solid fa-wind"></i><div><h4>Wind</h4><span id="searchWind">--</span> m/s</div></div>
+                            <div class="stat-card"><i class="fa-solid fa-gauge-high"></i><div><h4>Pressure</h4><span id="searchPressure">--</span> hPa</div></div>
+                            <div class="stat-card"><i class="fa-solid fa-droplet"></i><div><h4>Humidity</h4><span id="searchHumidity">--</span>%</div></div>
+                            <div class="stat-card"><i class="fa-regular fa-sun"></i><div><h4>Sunrise</h4><span id="searchSunrise">--</span></div></div>
+                            <div class="stat-card"><i class="fa-regular fa-moon"></i><div><h4>Sunset</h4><span id="searchSunset">--</span></div></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" data-page="home"><i class="fa-solid fa-house"></i></div>
+                <div class="nav-item active" data-page="search"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div class="nav-item" data-page="world"><i class="fa-solid fa-earth-americas"></i></div>
+            </div>
+        </div>
+
+        <!-- WORLD PAGE -->
+        <div id="worldPage" class="screen" style="display: none;">
+            <div class="page-content">
+                <div class="world-header">
+                    <div><i class="fa-regular fa-calendar-alt"></i> <span id="worldDate" style="font-weight: 500;"></span></div>
+                    <div class="floating-add-btn" id="addCityToggleBtn"><i class="fa-solid fa-plus"></i></div>
+                </div>
+                <div id="addPanel" class="add-panel" style="display: none;">
+                    <div class="search-wrapper" style="background: rgba(255,255,255,0.2);">
+                        <i class="fa-solid fa-city"></i>
+                        <input type="text" id="worldSearchInput" placeholder="Enter city name...">
+                    </div>
+                    <div id="worldMsgNormal" class="message-bubble" style="color:white;">✨ Search your city to add</div>
+                    <div id="worldMsgError" class="message-bubble" style="color:#ffcaca; display: none;">❌ City not found</div>
+                    <div id="worldMsgAdded" class="message-bubble" style="color:#b8ffb8; display: none;">✔ Successfully added!</div>
+                </div>
+                <div class="city-grid" id="citiesContainer"></div>
+            </div>
+            <div class="bottom-nav">
+                <div class="nav-item" data-page="home"><i class="fa-solid fa-house"></i></div>
+                <div class="nav-item" data-page="search"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <div class="nav-item active" data-page="world"><i class="fa-solid fa-earth-americas"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="script.js"></script>
+</body>
+</html>
